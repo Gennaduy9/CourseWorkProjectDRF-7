@@ -1,0 +1,24 @@
+[
+  {
+    "model": "users.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$SlRW9whY2rhbaOJfOFW1Hl$+LDpycoJM2Ns2jEc2xkPnpLb3HjU7i37I4hnB1l2RLI=",
+      "last_login": "2024-03-17T15:48:49.745Z",
+      "is_superuser": true,
+      "username": "",
+      "first_name": "Admin",
+      "last_name": "SkyPro",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2024-03-17T15:48:26.705Z",
+      "phone": null,
+      "city": null,
+      "avatar": "",
+      "email": "admin@mail.com",
+      "telegram_chat_id": "",
+      "groups": [],
+      "user_permissions": []
+    }
+  }
+]
