@@ -11,8 +11,7 @@ NULLABLE = {'null': True, 'blank': True}
 class Habit(models.Model):
     """ Модель полезной привычки """
     action = models.CharField(max_length=255, verbose_name='Действие')
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, verbose_name='Владелец',
-                              **NULLABLE)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, verbose_name='Владелец', null=True)
     nice_feeling = models.BooleanField(default=False, verbose_name='Признак приятного чувства')
     periodicity = models.IntegerField(default=7, verbose_name='Частота выполнения привычки')
     last_completed = models.DateField(verbose_name='Последний срок', **NULLABLE)
@@ -29,18 +28,22 @@ class Habit(models.Model):
 class Feeling(models.Model):
     """ Самосознание привычки """
 
-    period = [
-        ('week', 'once a week'),
-        ('every_day', 'every day')
+    PERIOD_WEEK = 1
+    PERIOD_EVERY_DAY = 2
+
+    PERIOD_CHOICES = [
+        (PERIOD_WEEK, 'once a week'),
+        (PERIOD_EVERY_DAY, 'every day')
     ]
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, verbose_name='Пользователь',
-                             **NULLABLE)
+                             null=True)
     place = models.CharField(max_length=255, verbose_name='Место действия')
     action = models.CharField(max_length=255, verbose_name='Действие')
     nice_feeling = models.BooleanField(default=False, verbose_name='Признак приятного чувства')
     related_habit = models.ForeignKey(Habit, on_delete=models.CASCADE, verbose_name='Связанная привычка', **NULLABLE)
-    frequency = models.CharField(choices=period, default='every_day', verbose_name="Периодичность")
+    frequency = models.PositiveSmallIntegerField(choices=PERIOD_CHOICES, default=PERIOD_EVERY_DAY,
+                                                 verbose_name="Периодичность")
     reward = models.CharField(max_length=255, verbose_name='Вознаграждение', **NULLABLE)
     time_to_complete = models.DurationField(verbose_name='Время завершения',
                                             validators=[MaxValueValidator(timedelta(seconds=500))])
