@@ -4,7 +4,6 @@ from django.utils import timezone
 
 from config import settings
 from .models import Habit
-# from .services import MyBot
 from .services import send_telegram_message
 
 
