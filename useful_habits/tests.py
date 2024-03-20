@@ -1,31 +1,28 @@
 from rest_framework import status
-from rest_framework.test import APITestCase
-from useful_habits.models import Habit
+from rest_framework.test import APITestCase, APIClient
+from useful_habits.models import Habit, Feeling
 from users.models import User
 
 
 class HabitTestCase(APITestCase):
 
     def setUp(self) -> None:
-        # creating user
-        self.user = User.objects.create_user(
-            username='testuser', password='testpassword')
+        self.client = APIClient()
+        self.user = User.objects.create(email="test@gmail.com", is_superuser=True, is_staff=True)
 
     def test_create_habit(self):
-        """ Habit creating testing """
+        """ Тестирование, создающее привычку """
 
-        # checking that the habit is created only for authenticated users
+        # проверка того, что привычка создана только для аутентифицированных пользователей
         self.client.force_authenticate(user=self.user)
 
         data = {
             "action": "test habit",
             "nice_feeling": True,
-            "owner": self.user
+
         }
-        response = self.client.post(
-            '/habit/create/',
-            data=data
-        )
+        response = self.client.post('/habit/create/', data=data)
+
         self.assertEqual(
             response.status_code,
             status.HTTP_201_CREATED

@@ -25,7 +25,7 @@ load_dotenv(BASE_DIR / '.env')
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-m8(wk-vfye52g6p_wx6##spmcyrlf(m_%o&fxgf(_e4(w!k(37"
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG") == "True"
@@ -89,9 +89,11 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "course_project_drf_7",
-        "USER": "postgres",
-        "PASSWORD": 12345,
+        "NAME": os.getenv("NAME"),  # Название БД
+        "USER": os.getenv("USER"),  # Пользователь для подключения
+        "PASSWORD": os.getenv("PASSWORD"),  # Пароль для этого пользователя
+        "HOST": "localhost",  # Адрес, на котором развернут сервер БД
+        "PORT": 5432,  # Порт, на котором работает сервер БД
     }
 }
 
@@ -184,7 +186,8 @@ CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND")
 CELERY_BEAT_SCHEDULE = {
     'check_habits_daily': {
         'task': 'useful_habits.tasks.check_habits_and_send_reminders',
-        'schedule': crontab(hour=8, minute=0),  # каждый день в 8 утра
+        'schedule': crontab(minute=0,
+                            hour=8),  # каждый день в 8 утра
     },
 }
 
@@ -192,8 +195,6 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'America/New_York'
-# CELERY_TASK_TRACK_STARTED = True
-# CELERY_TASK_TIME_LIMIT = 30 * 60
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
@@ -210,4 +211,4 @@ SERVER_EMAIL = EMAIL_HOST_USER
 EMAIL_ADMIN = EMAIL_HOST_USER
 
 API_TELEGRAM_TOKEN = os.getenv('API_TELEGRAM_TOKEN')
-TELEGRAM_ID = os.getenv('TELEGRAM_ID')
+telegram_id = os.getenv('TELEGRAM_ID')
